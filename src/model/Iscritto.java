@@ -37,4 +37,37 @@ public class Iscritto extends Persona {
     public void setPianoAlimentare(PianoAlimentare pianoAlimentare) {
         this.pianoAlimentare = pianoAlimentare;
     }
+
+    // Getter aggiunti
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCognome() {
+        return cognome;
+    }
+
+    public int getEtà() {
+        return età;
+    }
+
+    public double getPeso() {
+        return peso;
+    }
+
+    public double getAltezza() {
+        return altezza;
+    }
+
+    public void setEtà(int età) {
+        this.età = età;
+    }
+
+    public void setPeso(double peso) {
+        this.peso = peso;
+    }
+
+    public void setAltezza(double altezza) {
+        this.altezza = altezza;
+    }
 }

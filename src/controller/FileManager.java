@@ -76,6 +76,91 @@ public class FileManager {
         salvaRigaSuCSV("dati/alimentazione.csv", email, descrizione);
     }
 
+    public static void salvaIscritti(List<Iscritto> iscritti, String path) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(path))) {
+            for (Iscritto iscritto : iscritti) {
+                pw.println(iscritto.getNome() + "," +
+                        iscritto.getCognome() + "," +
+                        iscritto.getEmail() + "," +
+                        iscritto.getEtà() + "," +
+                        iscritto.getPeso() + "," +
+                        iscritto.getAltezza());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void eliminaIscrittoCSV(String email, String path) {
+        List<String> righe = new ArrayList<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String riga;
+            while ((riga = br.readLine()) != null) {
+                String[] campi = riga.split(",");
+                if (campi.length >= 3 && !campi[2].trim().equalsIgnoreCase(email)) {
+                    righe.add(riga);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(path))) {
+            for (String riga : righe) {
+                pw.println(riga);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void eliminaAllenamentoCSV(String email) {
+        eliminaRigaCSV("dati/allenamenti.csv", email);
+    }
+
+    public static void eliminaAlimentazioneCSV(String email) {
+        eliminaRigaCSV("dati/alimentazione.csv", email);
+    }
+
+    public static boolean emailEsiste(String email, String path) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String riga;
+            while ((riga = br.readLine()) != null) {
+                String[] campi = riga.split(",");
+                if (campi.length >= 3 && campi[2].trim().equalsIgnoreCase(email)) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static void eliminaRigaCSV(String path, String email) {
+        Map<String, String> dati = new LinkedHashMap<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            String riga;
+            while ((riga = br.readLine()) != null) {
+                String[] campi = riga.split(",", 2);
+                if (campi.length == 2 && !campi[0].trim().equalsIgnoreCase(email)) {
+                    dati.put(campi[0], campi[1]);
+                }
+            }
+        } catch (IOException e) {
+        }
+
+        try (PrintWriter pw = new PrintWriter(new FileWriter(path))) {
+            for (String key : dati.keySet()) {
+                pw.println(key + "," + dati.get(key));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static void salvaRigaSuCSV(String path, String email, String descrizione) {
         Map<String, String> dati = new LinkedHashMap<>();
 
